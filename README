@@ -1,0 +1,14 @@
+# A Simple Model for Predicting Protein Binding
+
+This simple demo trains and evaluates a simple model for predicting protein binding. Data for this demo is taken from the [Convolutional Neural Network Architectures for Predicting DNA-Protein Binding
+](http://cnn.csail.mit.edu/motif_discovery) project at MIT.
+
+Along the way, we log information within TensorBoard to gain insight into learning.
+
+## Running the Demo
+
+At the top-level directory for this repository, run the demo via the python interpreter:
+
+```bash
+python run_demo.py
+```
