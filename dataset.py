@@ -16,7 +16,17 @@ class Dataset(object):
         on the true label for that row.
     """
     reader = csv.reader(open(data_file_path), delimiter=' ')
+
+    sequences = []
+    labels = []
+
     for row in reader:
       if not row:
+        # Some files may contain empty rows.
         continue
-      print `row`
+
+      sequences.append(row[1])
+      labels.append(int(row[2]))
+
+    self._sequences = np.asarray(sequences)
+    self._labels = np.asarray(labels)
