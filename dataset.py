@@ -15,17 +15,32 @@ class Dataset(object):
       data_file_path: A path to a .data file. These test files have a
         DNA sequence separated by a space from either 0 or 1 depending
         on the true label for that row.
+
+    Raises:
+      ValueError: If the data being read is not well-formed. For
+        instance, all sequences must have the same length.
     """
     reader = csv.reader(open(data_file_path), delimiter=' ')
     sequences = []
     labels = []
+    self._sequence_length = None
 
     for row in reader:
       if not row:
-        # Some files may contain empty rows.
+        # Some files may contain empty rows. Filter them out.
         continue
 
-      sequences.append(row[1])
+      sequence = row[1].upper()
+      if self._sequence_length is None:
+        # Determine the sequence length from the data.
+        self._sequence_length = len(sequence)
+      elif self._sequence_length != len(sequence):
+        # All sequences must have the same length.
+        raise ValueError(
+            'Sequence %r has length %d, not %d' % (
+                sequence, len(sequence), self._sequence_length))
+
+      sequences.append(sequence)
       labels.append(int(row[2]))
 
     self._sequences = np.asarray(sequences)
@@ -38,6 +53,14 @@ class Dataset(object):
       The number of examples in the dataset.
     """
     return len(self._sequences)
+
+  def GetSequenceLength(self):
+    """Gets the length of a sequence in the dataset.
+
+    Returns:
+      The length of a sequence.
+    """
+    return self._sequence_length
 
   def GetBatch(self, size):
     """Gets a random batch of `size` examples.
