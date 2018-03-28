@@ -9,7 +9,9 @@ import model as model_lib
 import tensorflow as tf
 
 
-_DATA_DIRECTORY = 'data/wgEncodeAwgTfbsSydhHelas3Stat3IggrabUniPk'
+# _DATA_DIRECTORY = 'data/wgEncodeAwgTfbsSydhHelas3Stat3IggrabUniPk'
+#_DATA_DIRECTORY = 'data/wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk'
+_DATA_DIRECTORY = 'data/wgEncodeAwgTfbsSydhMcf10aesStat3TamUniPk'
 
 
 def main(_):

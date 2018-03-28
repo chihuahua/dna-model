@@ -35,27 +35,46 @@ class Model(object):
     activation_function = tf.sigmoid
 
     encoded = self._OneHotEncodeSequences(self.sequences_placeholder)
+
+    # Perform a convolution and then max pool.
     conv_layer = tf.contrib.layers.convolution2d(
         inputs=encoded,
         num_outputs=4,  # The number of filters to use.
-        kernel_size=(1, 8),
+        kernel_size=(1, 14),
         activation_fn=activation_function,
         normalizer_fn=tf.contrib.layers.batch_norm,
         normalizer_params={
             "is_training": self.mode == tf.contrib.learn.ModeKeys.TRAIN
         },
         padding='VALID')
-    flattened_activations = tf.contrib.layers.flatten(conv_layer)
+    max_pool = tf.nn.max_pool(
+        conv_layer,
+        ksize=[1, 1, 6, 1],
+        strides=[1, 1, 1, 1],
+        padding='VALID')asdfasd
+    flattened_activations = tf.contrib.layers.flatten(max_pool)
+
+    # Add a couple dense layers.
     fully_connected_layer = tf.contrib.layers.fully_connected(
         flattened_activations,
-        num_outputs=12,
+        num_outputs=64,
         activation_fn=activation_function)
+    fully_connected_layer = tf.contrib.layers.fully_connected(
+        fully_connected_layer,
+        num_outputs=32,
+        activation_fn=activation_function)
+    fully_connected_layer = tf.contrib.layers.fully_connected(
+        fully_connected_layer,
+        num_outputs=16,
+        activation_fn=activation_function)
+
     self.logits_layer = tf.contrib.layers.fully_connected(
         fully_connected_layer,
         num_outputs=2,
         activation_fn=activation_function)
     one_hot_targets = tf.contrib.layers.one_hot_encoding(
         labels=self.true_labels_placeholder, num_classes=2)
+
     # The shape from the one hot encoding is for some reason
     # (BATCH SIZE, 1, 2). We squeeze to remove the dimension of 1.
     self.one_hot_targets = tf.squeeze(one_hot_targets)
