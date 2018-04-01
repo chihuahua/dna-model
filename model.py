@@ -47,25 +47,20 @@ class Model(object):
             "is_training": self.mode == tf.contrib.learn.ModeKeys.TRAIN
         },
         padding='VALID')
-    max_pool = tf.nn.max_pool(
-        conv_layer,
-        ksize=[1, 1, 6, 1],
-        strides=[1, 1, 1, 1],
-        padding='VALID')asdfasd
-    flattened_activations = tf.contrib.layers.flatten(max_pool)
+    flattened_activations = tf.contrib.layers.flatten(conv_layer)
 
     # Add a couple dense layers.
     fully_connected_layer = tf.contrib.layers.fully_connected(
         flattened_activations,
-        num_outputs=64,
-        activation_fn=activation_function)
-    fully_connected_layer = tf.contrib.layers.fully_connected(
-        fully_connected_layer,
-        num_outputs=32,
-        activation_fn=activation_function)
-    fully_connected_layer = tf.contrib.layers.fully_connected(
-        fully_connected_layer,
         num_outputs=16,
+        activation_fn=activation_function)
+    fully_connected_layer = tf.contrib.layers.fully_connected(
+        fully_connected_layer,
+        num_outputs=8,
+        activation_fn=activation_function)
+    fully_connected_layer = tf.contrib.layers.fully_connected(
+        fully_connected_layer,
+        num_outputs=4,
         activation_fn=activation_function)
 
     self.logits_layer = tf.contrib.layers.fully_connected(
